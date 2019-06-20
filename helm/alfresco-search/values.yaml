@@ -12,12 +12,12 @@ replicaCount: 1
 type: "search-services"
 searchServicesImage:
   repository: alfresco/alfresco-search-services
-  tag: "1.3.0.4"
+  tag: "1.3.0.5"
   pullPolicy: &searchDockerImagePullPolicy Always
   internalPort: &searchDockerImageInternalPort 8983
 insightEngineImage:
   repository: quay.io/alfresco/insight-engine
-  tag: "1.1.0.1"
+  tag: "1.1.0.5"
   pullPolicy: *searchDockerImagePullPolicy
   internalPort: *searchDockerImageInternalPort
 service:
@@ -38,6 +38,7 @@ ingress:
 repository: {}
 environment:
   SOLR_CREATE_ALFRESCO_DEFAULTS: alfresco,archive
+  ALFRESCO_SECURE_COMMS: "none"
   SOLR_OPTS: "-Dsolr.content.dir=/opt/alfresco-search-services/data/contentstore"
 resources:
   requests:
