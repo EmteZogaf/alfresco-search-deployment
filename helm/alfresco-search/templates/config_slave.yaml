@@ -1,0 +1,23 @@
+{{- if .Values.slave.enabled }}
+# Defines the properties required by the Alfresco Search (Solr) Slave App
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "alfresco-search.fullName" . }}-solr-slave-configmap
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: search
+data:
+  SOLR_SOLR_HOST: "{{ template "alfresco-search.fullName" . }}-solr-slave"
+  SOLR_SOLR_PORT: "{{ .Values.slave.service.externalPort }}"
+  REPLICATION_MASTER_HOST: "{{ template "alfresco-search.fullName" . }}-solr"
+  REPLICATION_MASTER_PORT: "{{ template "alfresco-search.internalPort" . }}"
+  # The values for SOLR_CREATE_ALFRESCO_DEFAULTS and SOLR_OPTS, defined in the values.yaml for "search" are set next:
+  {{- if .Values.slave.environment }}
+  {{- range $key, $val := .Values.slave.environment }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}

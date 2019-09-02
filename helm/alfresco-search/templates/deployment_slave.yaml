@@ -1,30 +1,31 @@
+{{- if .Values.slave.enabled }}
 # Defines the deployment for the Alfresco Search (Solr) App
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "alfresco-search.fullName" . }}-solr
+  name: {{ template "alfresco-search.fullName" . }}-solr-slave
   labels:
-    app: {{ template "alfresco-search.fullName" . }}-solr
+    app: {{ template "alfresco-search.fullName" . }}-solr-slave
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    component: search
+    component: search-slave
 spec:
-  replicas: {{ .Values.common.replicaCount }}
+  replicas: {{ .Values.slave.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "alfresco-search.fullName" . }}-solr
+        app: {{ template "alfresco-search.fullName" . }}-solr-slave
         release: {{ .Release.Name }}
     spec:
-    {{- with .Values.affinity }}
-      affinity:
-{{ tpl . $ | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+#    {{- with .Values.affinity }}
+#      affinity:
+#{{ tpl . $ | indent 8 }}
+#    {{- end }}
+#    {{- with .Values.tolerations }}
+#      tolerations:
+#{{ toYaml . | indent 8 }}
+#    {{- end }}
       {{- if .Values.common.registryPullSecrets }}
       # only set this secret if a private docker registry variable is defined
       imagePullSecrets:
@@ -32,29 +33,29 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ template "alfresco-search.dockerImage" . }}
+          image: {{ template "alfresco-search-slave.dockerImage" . }}
           imagePullPolicy: {{ template "alfresco-search.pullPolicy" . }}
           envFrom:
           - configMapRef:
-              name: {{ template "alfresco-search.fullName" . }}-solr-configmap
+              name: {{ template "alfresco-search.fullName" . }}-solr-slave-configmap
           ports:
             - containerPort: {{ template "alfresco-search.internalPort" . }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.common.resources | indent 12 }}
           volumeMounts:
           - name: data
             mountPath: {{ .Values.common.persistence.search.data.mountPath }}
-            subPath: {{ .Values.common.persistence.search.data.subPath }}
+            subPath: {{ .Values.slave.persistence.search.data.subPath }}
           readinessProbe:
             httpGet:
-              path: /solr
+              path: /solr-slave
               port: {{ template "alfresco-search.internalPort" . }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           livenessProbe:
             httpGet:
-              path: /solr/alfresco/select?indent=on&q=*&wt=json
+              path: /solr/alfresco/admin/ping
               port: {{ template "alfresco-search.internalPort" . }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -68,8 +69,9 @@ spec:
           volumeMounts:
           - name: data
             mountPath: {{ .Values.common.persistence.search.data.mountPath }}
-            subPath: {{ .Values.common.persistence.search.data.subPath }}
+            subPath: {{ .Values.slave.persistence.search.data.subPath }}
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: "{{ .Values.common.persistence.existingClaim | default (printf "%s-solr-claim" (include "alfresco-search.fullName" .)) }}"
+          claimName: "{{ .Values.slave.persistence.existingClaim | default (printf "%s-solr-slave-claim" (include "alfresco-search.fullName" .)) }}"
+{{- end }}

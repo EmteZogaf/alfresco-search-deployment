@@ -1,10 +1,11 @@
+{{- if .Values.slave.enabled }}
 # Defines the service for the Alfresco Search (Solr) App
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "alfresco-search.fullName" . }}-solr
+  name: {{ template "alfresco-search.fullName" . }}-solr-slave
   labels:
-    app: {{ template "alfresco-search.fullName" . }}-solr
+    app: {{ template "alfresco-search.fullName" . }}-solr-slave
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -13,7 +14,8 @@ spec:
   ports:
     - port: {{ .Values.common.service.externalPort }}
       targetPort: {{ template "alfresco-search.internalPort" . }}
-      name: {{ .Values.common.service.name }}
+      name: {{ .Values.slave.service.name }}
   selector:
-    app: {{ template "alfresco-search.fullName" . }}-solr
+    app: {{ template "alfresco-search.fullName" . }}-solr-slave
     release: {{ .Release.Name }}
+{{- end }}

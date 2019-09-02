@@ -2,6 +2,10 @@
 You can access Alfresco Search using:
 
   Solr: {{ .Values.externalProtocol | default "http" }}://{{ .Values.externalHost }}:{{ .Values.externalPort | default .Values.service.externalPort }}/solr
+{{- if .Values.slave.enabled }}
+You can access Alfresco Search Slave using:
+
+  Solr: {{ .Values.externalProtocol | default "http" }}://{{ .Values.externalHost }}:{{ .Values.externalPort | default .Values.service.externalPort }}/solr-slave
 
 {{ if (index .Values "alfresco-insight-zeppelin" "enabled") }}
   Zeppelin: {{ .Values.externalProtocol | default "http" }}://{{ .Values.externalHost }}:{{ .Values.externalPort | default .Values.service.externalPort }}/zeppelin
@@ -11,4 +15,5 @@ You can access Alfresco Search using:
 If you have a specific DNS address for the cluster please run the following commands to get the application paths and configure ACS:
 
 helm upgrade --reuse-values {{ .Release.Name }} --set externalProtocol="http" --set externalHost="domain.com" --set externalPort="80" alfresco-incubator/alfresco-content-services
+{{ end }}
 {{ end }}

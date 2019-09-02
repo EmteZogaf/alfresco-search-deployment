@@ -1,11 +1,12 @@
+{{- if .Values.slave.enabled }}
 {{- if .Values.common.persistence.enabled -}}
-{{- if .Values.common.persistence.EbsPvConfiguration.volumeID }}
+{{- if .Values.slave.persistence.EbsPvConfiguration.volumeID }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ template "alfresco-search.fullName" . }}-solr-pv
+  name: {{ template "alfresco-search.fullName" . }}-solr-slave-pv
   labels:
-    app: {{ template "alfresco-search.fullName" . }}-solr
+    app: {{ template "alfresco-search.fullName" . }}-solr-slave
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -13,7 +14,7 @@ metadata:
 spec:
   capacity:
     storage: {{ .Values.common.persistence.VolumeSizeRequest }}
-  storageClassName: {{ template "alfresco-search.fullName" . }}-solr-sc
+  storageClassName: {{ template "alfresco-search.fullName" . }}-solr-slave-sc
   accessModes:
     - "ReadWriteOnce"
   {{- with .Values.PvNodeAffinity }}
@@ -29,9 +30,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ template "alfresco-search.fullName" . }}-solr-claim
+  name: {{ template "alfresco-search.fullName" . }}-solr-slave-claim
   labels:
-    app: {{ template "alfresco-search.fullName" . }}-solr
+    app: {{ template "alfresco-search.fullName" . }}-solr-slave
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -43,7 +44,8 @@ spec:
   resources:
     requests:
       storage: {{ .Values.common.persistence.VolumeSizeRequest }}
-  {{- if .Values.common.persistence.EbsPvConfiguration.volumeID }}
-  storageClassName: {{ template "alfresco-search.fullName" . }}-solr-sc
+  {{- if .Values.slave.persistence.EbsPvConfiguration.volumeID }}
+  storageClassName: {{ template "alfresco-search.fullName" . }}-solr-slave-sc
   {{- end }}
+{{- end }}
 {{- end -}}
