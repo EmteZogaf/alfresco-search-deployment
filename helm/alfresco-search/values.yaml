@@ -11,13 +11,13 @@ replicaCount: 1
 # More information can be found on https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md
 type: "search-services"
 searchServicesImage:
-  repository: alfresco/alfresco-search-services
-  tag: "1.3.0.5"
+  repository: quay.io/alfresco/search-services
+  tag: "1.4.0"
   pullPolicy: &searchDockerImagePullPolicy Always
   internalPort: &searchDockerImageInternalPort 8983
 insightEngineImage:
   repository: quay.io/alfresco/insight-engine
-  tag: "1.1.0.5"
+  tag: "1.4.0"
   pullPolicy: *searchDockerImagePullPolicy
   internalPort: *searchDockerImageInternalPort
 service:
