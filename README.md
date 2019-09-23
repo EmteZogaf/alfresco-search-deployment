@@ -33,6 +33,18 @@ Parameter | Description | Default
 `alfresco-search.ingress.whitelist_ips` | if `ingress.enabled=true`, user can restrict /solr to a list of IP addresses of CIDR notation | `0.0.0.0/0`
 `alfresco-search.alfresco-insight-zeppelin.enabled` | Enabled Alfresco Insight Zeppelin (_this will work only with InsightEngine image_) | `false`
 
+# Search type - insight-engine
+
+If you choose search type insight-engine during AWS EKS deployment then we need to add the below parameter in helm install command
+
+`--set alfresco-search.environment.SOLR_OPTS="-Dsolr.content.dir=/opt/alfresco-insight-engine/data/contentstore" --set alfresco-search.persistence.search.data.mountPath="/opt/alfresco-insight-engine/data"`
+
+This parameter helps to mount EBS volume in the correct location. By default its /opt/alfresco-search-service/data/
+
+## Example command: 
+`helm install alfresco-stable/alfresco-content-services --version 2.0.0 --name acs --namespace=$DESIREDNAMESPACE --set alfresco-search.type=insight-engine --set alfresco-search.environment.SOLR_OPTS="-Dsolr.content.dir=/opt/alfresco-insight-engine/data/contentstore" --set alfresco-search.persistence.search.data.mountPath="/opt/alfresco-insight-engine/data"`
+
+helm install alfresco-stable/alfresco-content-services --version
 ## Contributing guide
 Please use [this guide](CONTRIBUTING.md) to make a contribution to the project and information to report any issues.
 
