@@ -67,6 +67,10 @@ livenessProbe:
   initialDelaySeconds: 130
   periodSeconds: 20
   timeoutSeconds: 10
+
+# Apply your secret file in k8s environment to access quay.io images (Example: https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md)
+registryPullSecrets: quay-registry-secret
+
 # Define Affinity and Tolerations used for scheduling SOLR on Pod and PV level
 
 # affinity: |
