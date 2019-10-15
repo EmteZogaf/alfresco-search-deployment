@@ -27,7 +27,7 @@ The following table lists the configurable parameters of the [Alfresco Search](.
 Parameter | Description | Default
 --- | --- | ---
 `alfresco-search.type` | Define the type of Alfresco Search to use. Available options: `insight-engine` or `search-services` | `search-services`
-`alfresco-search.registryPullSecrets` | This property does not have to be set if `alfresco-search.type` is not set to `insight-engine` explicitly as the Docker image in [DockerHub](https://hub.docker.com/r/alfresco/alfresco-search-services/tags/) is publicly available| NONE  
+`alfresco-search.global.alfrescoRegistryPullSecrets` | This property does not have to be set if `alfresco-search.type` is not set to `insight-engine` explicitly as the Docker image in [DockerHub](https://hub.docker.com/r/alfresco/alfresco-search-services/tags/) is publicly available| NONE
 `alfresco-search.ingress.enabled` | Enable external access for Alfresco Search Services | `true`
 `alfresco-search.ingress.basicAuth` | if `alfresco-search.ingress.enabled` is `true`, user needs to provide a `base64` encoded `htpasswd` format user name & password (ex: `echo -n "$(htpasswd -nbm solradmin somepassword)"` where `solradmin` is username and `somepassword` is the password) | NONE
 `alfresco-search.ingress.whitelist_ips` | if `ingress.enabled=true`, user can restrict /solr to a list of IP addresses of CIDR notation | `0.0.0.0/0`
