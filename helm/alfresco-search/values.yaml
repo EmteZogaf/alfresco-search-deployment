@@ -6,8 +6,8 @@
 # This is the search provider used by alfresco-content-repository
 replicaCount: 1
 # Define the type of Alfresco Search to use. The default is Alfresco Search Services.
-# The type can be set to use Insight Engine with --set alfresco-search.type="insight-engine",alfresco-search.registryPullSecrets="quay-registry-secret",alfresco-insight-zeppelin.enabled="true"
-# As the Docker Image for Insight Engine is not publicly available the registryPullSecrets has to be set
+# The type can be set to use Insight Engine with --set alfresco-search.type="insight-engine",alfresco-search.global.alfrescoRegistryPullSecrets="quay-registry-secret",alfresco-insight-zeppelin.enabled="true"
+# As the Docker Image for Insight Engine is not publicly available the alfrescoRegistryPullSecrets has to be set
 # More information can be found on https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md
 type: "search-services"
 searchServicesImage:
@@ -69,7 +69,9 @@ livenessProbe:
   timeoutSeconds: 10
 
 # Apply your secret file in k8s environment to access quay.io images (Example: https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md)
-registryPullSecrets: quay-registry-secret
+# Global definition of Docker registry pull secret which can be overridden from parent ACS Helm chart(s)
+global:
+  alfrescoRegistryPullSecret: quay-registry-secret
 
 # Define Affinity and Tolerations used for scheduling SOLR on Pod and PV level
 
