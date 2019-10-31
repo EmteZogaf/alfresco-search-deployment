@@ -71,7 +71,7 @@ livenessProbe:
 # Apply your secret file in k8s environment to access quay.io images (Example: https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md)
 # Global definition of Docker registry pull secret which can be overridden from parent ACS Helm chart(s)
 global:
-  alfrescoRegistryPullSecret: quay-registry-secret
+  alfrescoRegistryPullSecrets: quay-registry-secret
 
 # Define Affinity and Tolerations used for scheduling SOLR on Pod and PV level
 
